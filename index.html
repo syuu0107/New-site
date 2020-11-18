@@ -1,0 +1,96 @@
+<?php require('./blog/wp-load.php'); ?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Test serve</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="javascript" href="JS/JQuery.js">
+</head>
+<body>
+
+  <!-- ヘッダー　ここから -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js'></script>
+  <div class="header">
+    <div class="logo">SITE NAME</div>
+    <a class="nav-button" href="#">
+      <span></span>
+      <span></span>
+      <span></span>
+    </a>
+    <nav class="nav-wrap">
+      <ul class="nav">
+        <li><a href="#">ABOUT</a></li>
+        <li><a href="#">SERVICE</a></li>
+        <li><a href="#">BLOG</a></li>
+        <li><a href="#">CONTACT</a></li>
+      </ul>
+    </nav>
+  </div>
+  <!-- ヘッダー　ここまで-->
+
+
+
+  <!-- メインパネル　ここから -->
+  <div id="main_panel">
+  </div>
+  <div id="sidebar">
+    <h2>新着情報</h2>
+    <div id="topics_list">
+
+      <?php
+      $args = array(
+      'posts_per_page' => 5,
+      'paged' => $paged,
+      'post_type' => array(
+      'post',
+      ),
+      );
+      $the_query = new WP_Query( $args );
+      ?>
+      <table class="topics_table">
+        <?php if($the_query->have_posts()): ?>
+          <?php while($the_query->have_posts()) : $the_query->the_post(); ?>
+            <?php
+            $category = get_the_category();
+            $cat_name = $category[ 0 ]->cat_name;
+            $cat_slug = $category[ 0 ]->category_nicename;
+            ?>
+            <tr>
+              <td class="date">
+                <?php the_time( get_option( 'date_format' ) ); ?>
+              </td>
+              <td class="title">
+                <a href="<?php the_permalink(); ?>">
+                  <?php echo get_the_title(); ?>
+                </a>
+              </td>
+              <!-- .titleWrap -->
+            </tr>
+          <?php endwhile; ?>
+        <?php else : ?>
+          <p>表示する記事はありませんでした。</p>
+        <?php endif; ?>
+      </table>
+      <?php wp_reset_postdata(); ?>
+
+    </div>
+  </div>
+  <!-- メインパネル　ここまで -->
+
+
+
+  <!-- コンテンツ　ここから -->
+  <div id="main">
+  </div>
+  <!-- コンテンツ　ここまで -->
+
+
+
+  <!-- フッター　ここから -->
+  <div id="footer">
+  </div>
+  <!-- フッター　ここまで -->
+
+</body>
+</html>
